@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productRoutes = require('./routes/products');
+// Servir archivos estáticos
+app.use(express.static('public'));
 
 const app = express();
 
