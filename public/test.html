@@ -1,38 +1,61 @@
+
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Agregar Producto</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input, button { padding: 8px; font-size: 16px; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
 <body>
-  <h2>Agregar Producto</h2>
-  <form id="productForm">
-    <label>Nombre:</label>
-    <input type="text" id="name" required><br>
-    <label>Precio:</label>
-    <input type="number" id="price" step="0.01" required><br>
-    <button type="submit">Agregar</button>
-  </form>
-
-  <script>
-    document.getElementById('productForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const product = {
-        name: document.getElementById('name').value,
-        price: parseFloat(document.getElementById('price').value)
-      };
-
-      try {
-        const response = await fetch('https://expert-guide-x5466xv6gg9gf6v6g-3000.app.github.dev/api/products', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(product)
-        });
+    <h2>Agregar Producto</h2>
+    <form id="productForm">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
         
-        const result = await response.json();
-        alert(`Producto agregado con ID: ${result.id}`);
-      } catch (error) {
-        alert('Error al agregar producto');
-        console.error(error);
-      }
-    });
-  </script>
+        <label for="price">Precio:</label>
+        <input type="number" id="price" step="0.01" required>
+        
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const product = {
+                name: document.getElementById('name').value,
+                price: parseFloat(document.getElementById('price').value)
+            };
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+                
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <p style="color: green;">✅ Producto agregado correctamente!</p>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+                
+                // Limpiar formulario
+                document.getElementById('productForm').reset();
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <p style="color: red;">❌ Error al agregar producto</p>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
