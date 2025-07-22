@@ -1,28 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Asegúrate de tener esto instalado
 const productRoutes = require('./routes/products');
-// Servir archivos estáticos
-app.use(express.static('public'));
 
+// 1. Primero crea la instancia de Express
 const app = express();
 
-// Middleware
+// 2. Luego configura los middlewares
+app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('public')); // Para servir archivos estáticos
 
-// Rutas
+// 3. Configura las rutas
 app.use('/api/products', productRoutes);
 
-// Manejo de errores básico
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Algo salió mal!');
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`API de productos corriendo en http://localhost:${PORT}`);
-});
-// Añade esto justo antes de las rutas de productos
+// Ruta básica de prueba
 app.get('/', (req, res) => {
   res.json({
     message: 'Bienvenido a la API de Productos',
@@ -35,5 +27,16 @@ app.get('/', (req, res) => {
     }
   });
 });
-const cors = require('cors');
-app.use(cors());
+
+// Manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Algo salió mal!');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+
+module.exports = app;
