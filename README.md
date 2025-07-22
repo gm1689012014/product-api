@@ -18,5 +18,5 @@ Crear un producto:
 ```bash
 curl -X POST -H "Content-Type: application/json" \
   -d '{"name":"Nuevo Producto","price":99.99}' \
-  https://tu-codespace-3000.githubpreview.dev/api/products
+  https://expert-guide-x5466xv6gg9gf6v6g-3000.app.github.dev//api/products
 ```
