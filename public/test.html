@@ -1,22 +1,75 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>API de Productos - CRUD Completo</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section { margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        h2 { color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-        input, select, button { padding: 8px; font-size: 16px; }
-        button { background-color: #4CAF50; color: rgb(255, 255, 255); border: none; cursor: pointer; }
-        button:hover { opacity: 0.9; }
-        button.delete { background-color: #f44336; }
-        button.update { background-color: #2196F3; }
-        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
-        .result { margin-top: 15px; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: rgb(255, 255, 255);
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+
+        button.update {
+            background-color: #2196F3;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .result {
+            margin-top: 15px;
+        }
     </style>
 </head>
+
 <body>
     <h1>API de Productos - CRUD Completo</h1>
 
@@ -78,18 +131,18 @@
                     method,
                     headers: { 'Content-Type': 'application/json' }
                 };
-                
+
                 if (data) {
                     options.body = JSON.stringify(data);
                 }
-                
+
                 const response = await fetch(url, options);
                 const result = await response.json();
-                
+
                 if (!response.ok) {
                     throw new Error(result.message || 'Error en la petición');
                 }
-                
+
                 return result;
             } catch (error) {
                 throw error;
@@ -99,7 +152,7 @@
         // Crear Producto
         document.getElementById('createForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const product = {
                 name: document.getElementById('createName').value,
                 price: parseFloat(document.getElementById('createPrice').value)
@@ -128,7 +181,7 @@
         document.getElementById('getOneForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const productId = document.getElementById('productId').value;
-            
+
             try {
                 const result = await makeRequest(`/api/products/${productId}`, 'GET');
                 showResult('getResult', `🔍 Producto encontrado:\n${JSON.stringify(result, null, 2)}`);
@@ -140,14 +193,14 @@
         // Actualizar Producto
         document.getElementById('updateForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const productId = document.getElementById('updateId').value;
             const updates = {};
-            
+
             if (document.getElementById('updateName').value) {
                 updates.name = document.getElementById('updateName').value;
             }
-            
+
             if (document.getElementById('updatePrice').value) {
                 updates.price = parseFloat(document.getElementById('updatePrice').value);
             }
@@ -162,28 +215,29 @@
 
         // Eliminar Producto
         document.getElementById('deleteForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const productId = document.getElementById('deleteId').value;
-    
-    try {
-        const response = await fetch(`/api/products/${productId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            e.preventDefault();
+            const productId = document.getElementById('deleteId').value;
+
+            try {
+                const response = await fetch(`/api/products/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al eliminar producto');
+                }
+
+                showResult('deleteResult', `🗑️ ${result.message}\nID eliminado: ${result.deletedId}`);
+                document.getElementById('deleteForm').reset();
+
+            } catch (error) {
+                showResult('deleteResult', `❌ Error: ${error.message}`, true);
+            }
         });
-        
-        const result = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(result.error || 'Error al eliminar producto');
-        }
-        
-        showResult('deleteResult', `🗑️ ${result.message}\nID eliminado: ${result.deletedId}`);
-        document.getElementById('deleteForm').reset();
-        
-    } catch (error) {
-        showResult('deleteResult', `❌ Error: ${error.message}`, true);
-    }
-});
     </script>
 </body>
+
 </html>
