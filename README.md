@@ -12,6 +12,20 @@ API RESTful básica para gestión de productos
 - `PUT /api/products/:id` - Actualizar un producto
 - `DELETE /api/products/:id` - Eliminar un producto
 
+```mermaid
+flowchart TD
+    Cliente -->|GET /items| Obtener_todos_los_productos
+    Cliente -->|GET /items/:id| Obtener_item_por_ID
+    Cliente -->|POST /items| Crear_nuevo_item
+    Cliente -->|PUT /items/:id| Actualizar_item
+    Cliente -->|DELETE /items/:id| Eliminar_item
+
+    Obtener_todos_los_items --> Base_de_datos
+    Obtener_item_por_ID --> Base_de_datos
+    Crear_nuevo_item --> Base_de_datos
+    Actualizar_item --> Base_de_datos
+    Eliminar_item --> Base_de_datos
+```
 ## Ejemplo de Uso
 
 Crear un producto:
