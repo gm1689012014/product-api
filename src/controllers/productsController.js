@@ -63,13 +63,26 @@ exports.updateProduct = (req, res) => {
 exports.deleteProduct = (req, res) => {
   try {
     const id = Number(req.params.id);
-    const deletedId = productModel.remove(id);
-    if (deletedId) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+    const productExists = productModel.getById(id);
+    
+    if (!productExists) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Producto no encontrado' 
+      });
     }
+    
+    productModel.remove(id);
+    res.json({ 
+      success: true,
+      message: `Producto con ID ${id} eliminado correctamente`,
+      deletedId: id
+    });
+    
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 };
