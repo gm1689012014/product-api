@@ -15,18 +15,35 @@ app.use(express.static('public')); // Para servir archivos estáticos
 app.use('/api/products', productRoutes);
 
 // Ruta básica de prueba
+//app.get('/', (req, res) => {
+  //res.json({
+    //message: 'Bienvenido a la API de Productos',
+    //endpoints: {
+      //getAllProducts: 'GET /api/products',
+      //getProduct: 'GET /api/products/:id',
+      //createProduct: 'POST /api/products',
+      //updateProduct: 'PUT /api/products/:id',
+      //deleteProduct: 'DELETE /api/products/:id'
+    //}
+  //});
+//});
+const express = require('express');
+const path = require('path');
+//const app = express();
+
+// Configurar middleware
+app.use(express.static('public'));
+app.use(express.json());
+
+// Redirigir la ruta raíz a test.html
 app.get('/', (req, res) => {
-  res.json({
-    message: 'Bienvenido a la API de Productos',
-    endpoints: {
-      getAllProducts: 'GET /api/products',
-      getProduct: 'GET /api/products/:id',
-      createProduct: 'POST /api/products',
-      updateProduct: 'PUT /api/products/:id',
-      deleteProduct: 'DELETE /api/products/:id'
-    }
-  });
+  res.sendFile(path.join(__dirname, 'public', 'test.html'));
 });
+
+// Tus rutas API existentes
+const productRoutes = require('./routes/products');
+app.use('/api/products', productRoutes);
+
 
 // Manejo de errores
 app.use((err, req, res, next) => {
